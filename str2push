@@ -1,0 +1,17 @@
+#!/bin/bash
+inputlen=${#1}
+
+if [ -z "$1" ]
+then
+  echo "Error: needs a string"
+  exit 1
+fi
+
+let "remainder = $inputlen % 4"
+if [ $remainder -ne 0 ]
+then
+  echo "Error: need a 4-byte padded string"
+  exit 1
+fi
+
+echo -ne "$1" | rev | xxd -p | fold -w8 | awk '{ print "push 0x"$1 }'
